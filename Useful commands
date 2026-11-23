@@ -1,0 +1,39 @@
+Useful commands
+
+Compact
+
+Compact summarizes your conversation, uses that summary as the new context, and deletes the old messages.
+This frees up your context window so Claude can keep going. The risk is that something important gets dropped in the summary, and Claude drifts off course.
+
+/compact Focus on the --version flag implementation
+
+Anything you write after the command shapes what the summary keeps. That's your steering wheel for context.
+
+
+Rewind
+
+When Claude heads down the wrong path, you don't have to prompt your way back out. Rewind takes you to your last checkpoint. Every user prompt creates a checkpoint you can revert to. 
+To open the menu, double tap escape on an empty prompt.
+
+
+Goal
+
+Goal sets a completion condition. You describe what "done" looks like, and Claude keeps working across turns until a fast evaluator confirms those conditions are met. It won't just stop the first time it thinks it's finished.
+
+/goal all tests in src/billing pass, and the type checker reports zero errors
+
+To cancel it, run /goal clear. One important constraint: the evaluator only reads the transcript. So your condition has to be checkable from the output Claude actually produces, like the results of a test run.
+
+
+Loop
+
+Loop runs a prompt on an interval between turns, either fixed or self-paced. Use it to poll something external, like a CI run or a deploy, and act when the state changes.
+
+To stop a self-paced loop while it waits for its next run, press escape. A loop on a fixed interval keeps running until you ask Claude to cancel it or seven days pass.
+
+
+
+Run parallel work with worktrees
+
+
+review it to get
