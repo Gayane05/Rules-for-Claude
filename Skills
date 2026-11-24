@@ -1,0 +1,30 @@
+Skill - Knowledge Claude applies automatically whenever it's relevant.
+
+A skill is a folder with a SKILL.md inside it: a name, a description that triggers it, and the procedure itself.
+Only the descriptions load into context until a skill is needed, so there's little cost to packaging every procedure you repeat.
+
+For example When you ask Claude to review this PR, it matches your request against available skill descriptions and finds this one. Claude reads your request, 
+compares it to all available skill descriptions, and activates the ones that match.
+
+Skills load on demand when they match your request. It only loads in the name and description, so it doesn't fill up your entire context window. 
+Skills work best for specialized knowledge that applies to specific tasks.
+
+Drop a reference.md next to SKILL.md for detailed material, then link to it from SKILL.md. Claude reads it only when it needs that depth. Your main file stays short.
+
+Three places to put instructions and when which one to use.
+
+1. Conventions that apply all the time, things like naming rules or where files go, belong in your CLAUDE.md file. 
+2. Procedures and reference material tied to a particular kind of task belong in a skill.
+3. A rule that Claude must not be able to skip belongs in a hook, not in either of the above. 
+That's because CLAUDE.md and skills are both instructions that Claude follows, while a hook is code that actually runs. 
+If skipping the rule isn't acceptable, don't leave it up to instruction-following.
+
+
+Example
+A verification skill removes that dependency. Here's the shape of it. You ask Claude to refactor something. 
+When it finishes, the change matches the skill's description, so the skill fires on its own. From there it:
+
+Runs the test suite.
+Reads the diff.
+Checks that no test was weakened just to make things pass.
+Reports pass or fail, with the evidence attached.
