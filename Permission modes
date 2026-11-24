@@ -1,0 +1,57 @@
+Permission modes
+
+
+Manual mode
+Reads only, without prompting. Everything else asks first.
+
+AcceptEdits on
+Runs reads, file edits, and common file system bash commands without asking. This is for iterating on code that you review after the fact.
+
+Plan mode
+Researches and proposes changes without editing anything.
+Reads run freely, and when auto mode is available, auto's classifier reviews the commands Claude runs to explore and lets the approved ones run without a prompt.
+
+Auto 
+Accepts everything, with a separate classifier model reviewing most actions before they run.
+Auto is the hands-off mode. Claude runs on its own, but before most actions execute,
+a separate classifier model reviews them. The classifier guards intent. It's watching for moves that escalate beyond what you actually asked for.
+
+Here's the kind of thing it's designed to block:
+Production deploys and migrations
+Force pushing, or piping downloaded code straight into a shell
+Sending sensitive data to external endpoints
+Irreversibly destroying files that existed before the session
+claude auto-mode defaults prints the full list.
+
+And it waves through the everyday work: local edits in your project, installing dependencies from your lock file,
+read-only requests, and pushing to any branch of the repository you're working in, including the default branch. 
+The exception is any other branch whose name marks it as a deploy target, such as production or gh-pages. The classifier judges a push there on its own terms.
+
+The classifier checks intent, not correctness. It won't catch whether the code actually works.
+So if you ask Claude to refactor authentication and it writes broken authentication, the classifier waves it through, because broken isn't dangerous.
+
+That's why you pair auto mode with a stop hook that runs your tests. The two work together:
+
+Auto mode watches what Claude is trying to do while it runs.
+The stop hook confirms the code actually runs once Claude finishes.
+
+One guards intent before most actions, the other guards correctness after. Auto mode's guardrails are still evolving, so check the docs for the current block and allow lists.
+
+
+
+Don't ask
+Allows file reads inside your working directories and pre-approved tools. Anything that would prompt is auto-denied.
+
+Claude still runs what needs no approval in Manual mode, such as file reads inside your working directories, plus the tools you pre-approved. 
+
+Anything that would otherwise prompt gets auto-denied. 
+
+Claude auto-denies anything that would prompt. Allow rules and PreToolUse hook approvals still run. 
+
+Explicit ask rules, AskUserQuestion, and critical-path removals are denied rather than prompted. Cloud sessions ignore it when it comes from settings files.
+CI pipelines, scheduled jobs, overnight batches. That's the whole point. Your pipeline keeps moving instead of hanging on an approval no one is there to give.
+You set it with --permission-mode dontAsk
+
+Bypass Permission
+Skips permission prompts, apart from a few actions that no mode approves on its own.
+This is the equivalent of the dangerously-skip-permissions flag. Only run it inside an isolated container or virtual machine.
