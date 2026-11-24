@@ -1,10 +1,11 @@
+Some rules are guidance - Claude.md
+Some rules are hard lines that must never be crossed - Hooks
+
 The four locations where CLAUDE.md isn't just one file sitting in your project. 
 
 There are four places it can live, and Claude loads all of them together at launch. Nothing gets dropped, and they stack.
 
-
 Here's what each one is for:
-
 
 Managed policy — the org-level file your platform team controls. You can't exclude it, so org policy is always in play.
 User — your personal preferences that follow you across every project on your machine, in ~/.claude/CLAUDE.md.
