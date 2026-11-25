@@ -1,0 +1,24 @@
+Subagents
+
+Subagents are specialized assistants that Claude Code can delegate tasks to.
+Think of them as focused helpers: each one runs in its own conversation context window, does its work, and returns a summary to the main thread.
+The intermediate steps -- all the file reads, searches, and tool calls -- stay isolated and never clutter your main conversation.
+
+Subagents spinn up a separate context window. The subagent's starting context includes:
+
+1. A custom system prompt from your configuration file that defines the subagent's role and behavior
+2. A task description written by the parent agent based on what you asked for
+
+The subagent then works on its own. 
+It reads files, runs searches, edits code -- whatever it needs to do.
+When it's done, only a summary comes back to your main conversation. Claude Code saves the rest of the subagent's conversation in a separate transcript file.
+
+
+This means your main context stays clean. You get the answer without all the noise of the journey it took to find it. 
+The tradeoff is that your main conversation doesn't see how the subagent reached its conclusions.
+
+Built-in Subagents
+
+General purpose subagent -- for multi-step tasks that require both exploration and action
+Explore -- for fast searching and navigation of codebases
+Plan -- used during plan mode for research and analysis of your codebase before presenting a plan
