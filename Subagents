@@ -56,3 +56,86 @@ Effective subagents share four characteristics:
 2. **Structured output** -- Define an output format in the system prompt so the subagent knows when it's done and returns information the main thread can use.
 3. **Obstacle reporting** -- Include a section in the output format for workarounds, quirks, and problems so the main thread doesn't have to rediscover them.
 4. **Limited tool access** -- Only give a subagent the tools it actually needs. Read-only for research, bash for reviewers, edit/write only for agents that should change code.
+
+
+When subagents shine
+
+Subagents work best when the exploration is separate from the execution. 
+If each step in a task depends on what the previous step discovered, you want that work in your main thread. 
+But if you just need an answer and don't care about the journey, delegate it.
+
+
+Subagents excel at tasks where:
+
+
+You need a result, not a play-by-play of how it was found
+The exploratory work would clutter your main thread's context
+The task benefits from a fresh perspective or a custom system prompt
+When subagents shine
+
+Subagents work best when the exploration is separate from the execution. If each step in a task depends on what the previous step discovered, you want that work in your main thread. But if you just need an answer and don't care about the journey, delegate it.
+
+
+Subagents excel at tasks where:
+
+
+You need a result, not a play-by-play of how it was found
+The exploratory work would clutter your main thread's context
+The task benefits from a fresh perspective or a custom system prompt
+Research task
+Code Reviews
+Custom System Prompts
+Claude Code's default system prompt emphasizes concise, code-focused responses. That works great for coding, but not for everything.
+Here are two cases where a custom system prompt makes the subagent genuinely better than the main thread:
+Copywriting subagent -- Give it instructions about tone, audience, and style.
+Claude Code's default prompt tends toward concise technical writing, 
+which really isn't what you want for a landing page or email campaign.
+A copywriting subagent can have completely different instructions about voice and structure.
+Styling subagent -- Tell it in its system prompt to read your design system files first,
+so it knows your color variables, spacing conventions, and component patterns before it starts writing any CSS.
+
+
+
+When Subagents Hurt
+
+Expert Claims
+
+1. Subagents that claim expertise rarely help. 
+Prompts like "you are a Python expert" or "you are a Kubernetes specialist" add no value because Claude already has that knowledge. 
+There's nothing a so-called expert subagent can do that your main thread can't do directly.
+
+2. Sequential Pipelines
+
+Sequential subagent pipelines create problems. 
+Consider a three-agent flow: one to reproduce a bug, one to debug it, and one to fix it. 
+Pipelines work when tasks are truly independent. 
+They fail when each step depends on discoveries from the previous step -- and bug fixing almost always does. 
+Information gets lost in the handoff between agents.
+
+3. Test Runners
+
+Test runner subagents tend to hide information you need. When tests fail, you want the full output to diagnose issues. 
+A subagent that returns "tests failed" forces you to create additional debug scripts to get details that would have been visible in direct output.
+Testing has shown that the test runner pattern performed worst among all configurations.
+
+
+The Decision Rule
+
+When you're deciding whether to use a subagent, ask yourself one question: does the intermediate work matter?
+
+If the answer is no -- you just need the final result -- delegate it to a subagent. 
+If the answer is yes -- you need to see and react to what's happening along the way -- keep it in your main thread.
+
+
+Use subagents for:
+
+- Research and exploration
+- Code reviews
+- Tasks that need a custom system prompt
+
+Avoid subagents for:
+
+- "Expert" personas that don't add real capability
+- Multi-step pipelines where each step depends on the last
+- Running tests where you need full output for debugging
+
