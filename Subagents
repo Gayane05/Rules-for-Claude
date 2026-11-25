@@ -22,3 +22,37 @@ Built-in Subagents
 General purpose subagent -- for multi-step tasks that require both exploration and action
 Explore -- for fast searching and navigation of codebases
 Plan -- used during plan mode for research and analysis of your codebase before presenting a plan
+
+Description is one line without new lines.
+
+When you send a message to the main context window agent, the name and description of every available subagent are included in the system prompt.
+This is how the main agent decides which subagent to launch and when. If you want better control over when a subagent gets triggered automatically,
+the name and description are what you should tweak.
+
+
+The description also plays a second role. When the main agent launches a subagent, 
+it writes an input prompt to kick off the task. It uses the description as guidance for writing that prompt. 
+So the description doesn't just control when a subagent runs -- it shapes what the subagent is told to do.
+
+Defining an Output Format
+
+Limiting Tool Access
+
+Not every subagent needs access to every tool. Think about what a subagent actually needs to do, 
+and only give it the tools required for that job. This does two things: it prevents unintended side effects, 
+and it makes each subagent's role clearer when you have several of them.
+
+
+Here's how to think about tool access for common subagent types:
+
+
+Research / read-only subagent -- Only needs Glob, Grep, and Read. Cannot accidentally modify files.
+Code reviewer -- Needs Bash access to run git diff and see what changed, but still doesn't need Edit or Write.
+Styling / code modification agent -- This is where you give Edit and Write access, because the subagent's job is to actually change your code.
+
+Effective subagents share four characteristics:
+
+1. **Specific descriptions** -- The description controls when the subagent is launched and what instructions it receives. Write it to steer both.
+2. **Structured output** -- Define an output format in the system prompt so the subagent knows when it's done and returns information the main thread can use.
+3. **Obstacle reporting** -- Include a section in the output format for workarounds, quirks, and problems so the main thread doesn't have to rediscover them.
+4. **Limited tool access** -- Only give a subagent the tools it actually needs. Read-only for research, bash for reviewers, edit/write only for agents that should change code.
